@@ -1,5 +1,7 @@
 import { Grid, Card, Tabs, Tab, Box } from "@mui/material";
 import React, { useState } from "react";
+import UserLogin from "./UserLogin";
+import UserRegister from "./UserRegister";
 
 const shopping_image = require("../../images/shopping_image.png");
 
@@ -30,8 +32,9 @@ const LogiReg = () => {
             backgroundRepeat: "no-repeat",
             backgroundSize: "cover",
             backgroundPosition: "center",
+            display:{xs:'none',sm:'block'}
           }}></Grid>
-        <Grid item lg={5} sm={7}>
+        <Grid item lg={5} sm={7} xs={12}>
           <Card sx={{ width: "100%", height: "100%" }}>
             <Box>
               <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
@@ -45,10 +48,10 @@ const LogiReg = () => {
                 </Tabs>
               </Box>
               <TabPanel value={value} index={0}>
-                User Login
+                <UserLogin />
               </TabPanel>
               <TabPanel value={value} index={1}>
-                User Registration
+                <UserRegister />
               </TabPanel>
             </Box>
           </Card>
