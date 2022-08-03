@@ -24,6 +24,7 @@ function App() {
             <Route path="reset/:token" element={<ResetPassword />} />
           </Route>
           <Route path="/profile" element={<Profile />} />
+          <Route path ="*" element={<h1> Error 404 Page not found !!</h1>} />
         </Routes>
       </BrowserRouter>
     </>

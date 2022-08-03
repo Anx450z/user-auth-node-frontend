@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { Alert, AlertColor, Box, Button, Grid, TextField } from "@mui/material";
-import { useNavigate } from 'react-router-dom'
 
 function ChangePassword() {
   const [error, setError] = useState({
@@ -8,7 +7,6 @@ function ChangePassword() {
     msg: "",
     type: "",
   });
-  const navigate = useNavigate()
   const handleSubmit = (event: any) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
