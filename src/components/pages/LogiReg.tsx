@@ -1,4 +1,5 @@
-import { Grid, Card, Tabs, Tab, Box } from "@mui/material";
+import { ShoppingBag } from "@mui/icons-material";
+import { Grid, Card, Tabs, Tab, Box, Typography } from "@mui/material";
 import React, { useState } from "react";
 import UserLogin from "./UserLogin";
 import UserRegister from "./UserRegister";
@@ -53,6 +54,12 @@ const LogiReg = () => {
               <TabPanel value={value} index={1}>
                 <UserRegister />
               </TabPanel>
+            </Box>
+            <Box textAlign='center' sx={{mt:2}}>
+              <ShoppingBag sx={{ color: 'purple', fontSize: 100 }} />
+              <Typography variant='h5' sx={{ fontWeight: 'bold' }}>
+                Shopping App
+              </Typography>
             </Box>
           </Card>
         </Grid>
