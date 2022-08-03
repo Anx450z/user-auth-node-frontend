@@ -1,15 +1,14 @@
 import React, { useState } from "react";
 import { Alert, AlertColor, Box, Button, Grid, TextField } from "@mui/material";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from 'react-router-dom'
 
-function ResetPassword() {
+function ChangePassword() {
   const [error, setError] = useState({
     status: false,
     msg: "",
     type: "",
   });
   const navigate = useNavigate()
-
   const handleSubmit = (event: any) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -24,12 +23,9 @@ function ResetPassword() {
         ).reset();
         setError({
           status: true,
-          msg: "Password reset successfully, Redirecting to login page...",
+          msg: "Password reset successfully",
           type: "success",
         });
-        setTimeout(()=>{
-          navigate("/login")
-        }, 3000)
       }else{
         setError({
           status: true,
@@ -92,6 +88,7 @@ function ResetPassword() {
       </Grid>
     </>
   );
+  
 }
 
-export default ResetPassword;
+export default ChangePassword

@@ -25,7 +25,7 @@ const UserLogin = () => {
         msg: "Login Success",
         type: 'success'
       })
-      navigate('/')
+      navigate('/profile')
     }else{
       setError({
         status : true,
