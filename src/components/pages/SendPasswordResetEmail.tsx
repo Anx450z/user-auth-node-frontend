@@ -1,46 +1,43 @@
-import { Alert, AlertColor, Box, Button, TextField } from "@mui/material";
-import React, { useState } from "react";
-import { NavLink, useNavigate } from "react-router-dom";
+import React, {useState} from 'react'
+import { Alert, AlertColor, Box, Button, Grid, TextField } from "@mui/material";
 
-const UserLogin = () => {
+function SendPasswordResetEmail() {
   const [error, setError] = useState({
     status: false,
     msg: "",
     type: ""
   })
 
-  const navigate = useNavigate()
-  
   const handleSubmit = (event: any) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     const actualData = {
       email: data.get("email"),
-      password: data.get("password"),
     };
-    if (actualData.email && actualData.password) {
-      (document.getElementById("login-form") as HTMLFormElement).reset();
+    if (actualData.email) {
+      (document.getElementById("password-reset-email-form") as HTMLFormElement).reset();
       setError({
         status : true,
-        msg: "Login Success",
+        msg: "password sent, check your email",
         type: 'success'
       })
-      navigate('/')
     }else{
       setError({
         status : true,
-        msg: "All fields are required",
+        msg: "all fields are required, please enter a valid email",
         type: 'error'
       })
     }
   };
   return (
     <>
-      <Box
+      <Grid container justifyContent='center'>
+        <Grid item sm ={6} xs={12}>
+        <Box
         component="form"
         noValidate
         sx={{ mt: 1 }}
-        id="login-form"
+        id="password-reset-email-form"
         onSubmit={handleSubmit}>
         <TextField
           required
@@ -51,28 +48,20 @@ const UserLogin = () => {
           label="Email Address"
           autoFocus
         />
-        <TextField
-          required
-          margin="normal"
-          fullWidth
-          id="password"
-          name="password"
-          label="Password"
-          type="password"
-        />
         <Box textAlign={"center"}>
           <Button
             type="submit"
             variant="contained"
             sx={{ mt: 3, mb: 2, px: 5 }}>
-            Login
+            Send
           </Button>
         </Box>
-        <NavLink to="/sendpasswordresetemail">Forgot Password ?</NavLink>
         {error.status ? <Alert severity={error.type as AlertColor}>{error.msg}</Alert> : '' }
       </Box>
+        </Grid>
+      </Grid>
     </>
   );
 };
 
-export default UserLogin;
+export default SendPasswordResetEmail

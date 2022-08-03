@@ -11,7 +11,7 @@ function UserRegister() {
 
   const navigate = useNavigate();
 
-  const handleSubmit = (event: any) => {
+  const handleSubmit = (event: any) => { 
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     const actualData = {
