@@ -1,6 +1,7 @@
 import { Alert, AlertColor, Box, Button, TextField } from "@mui/material";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import {useRegisterUserMutation} from '../../services/userAuthApi'
 
 function UserRegister() {
   const [error, setError] = useState({
@@ -10,29 +11,36 @@ function UserRegister() {
   });
 
   const navigate = useNavigate();
+  const [registerUser, {isLoading}] = useRegisterUserMutation()
 
-  const handleSubmit = (event: any) => { 
+  const handleSubmit = async (event: any) => { 
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     const actualData = {
       email: data.get("email"),
       password: data.get("password"),
-      user_name: data.get("user_name"),
-      confirm_password: data.get("confirm_password"),
+      userName: data.get("user_name"),
+      firstName: data.get("first_name"),
+      lastName: data.get("last_name"),
+      passwordConfirmation: data.get("confirm_password"),
     };
+    console.log(actualData)
     if (
       actualData.email &&
       actualData.password &&
-      actualData.user_name &&
-      actualData.confirm_password !== null
+      actualData.userName &&
+      actualData.passwordConfirmation !== null
     ) {
-      if (actualData.password === actualData.confirm_password) {
-        (document.getElementById("register-form") as HTMLFormElement).reset();
+      if (actualData.password === actualData.passwordConfirmation) {
+        // (document.getElementById("register-form") as HTMLFormElement).reset();
+        const res = await registerUser(actualData)
+        console.log(res)
         setError({
           status: true,
           msg: "Login Success",
           type: "success",
         });
+
         navigate("/profile");
       } else {
         setError({
