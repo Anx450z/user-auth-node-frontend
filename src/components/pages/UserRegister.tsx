@@ -1,7 +1,15 @@
-import { Alert, AlertColor, Box, Button, TextField } from "@mui/material";
+import {
+  Alert,
+  AlertColor,
+  Box,
+  Button,
+  CircularProgress,
+  TextField,
+} from "@mui/material";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import {useRegisterUserMutation} from '../../services/userAuthApi'
+import { storeToken } from "../../services/LocalStorageService";
+import { useRegisterUserMutation } from "../../services/userAuthApi";
 
 function UserRegister() {
   const [error, setError] = useState({
@@ -11,9 +19,9 @@ function UserRegister() {
   });
 
   const navigate = useNavigate();
-  const [registerUser, {isLoading}] = useRegisterUserMutation()
+  const [registerUser, { isLoading }] = useRegisterUserMutation();
 
-  const handleSubmit = async (event: any) => { 
+  const handleSubmit = async (event: any) => {
     event.preventDefault();
     const form_data = new FormData(event.currentTarget);
     const actualData = {
@@ -32,18 +40,18 @@ function UserRegister() {
     ) {
       if (actualData.password === actualData.passwordConfirmation) {
         (document.getElementById("register-form") as HTMLFormElement).reset();
-    
-        const res:any = await registerUser(actualData)
-        if (res.data.status === "success"){
+
+        const res: any = await registerUser(actualData);
+        if (res.data.status === "success") {
           setError({
             status: true,
             msg: "Registration Success",
             type: "success",
           });
-          // Store Token
+          storeToken(res.data.token)
           navigate("/login");
         }
-        if (res.data.status === "failed"){
+        if (res.data.status === "failed") {
           setError({
             status: true,
             msg: res.data.msg,
@@ -123,13 +131,17 @@ function UserRegister() {
           label="Confirm Password"
           type="password"
         />
-        <Box textAlign={"center"}>
-          <Button
-            type="submit"
-            variant="contained"
-            sx={{ mt: 3, mb: 2, px: 5 }}>
-            Register
-          </Button>
+        <Box textAlign="center">
+          {isLoading ? (
+            <CircularProgress />
+          ) : (
+            <Button
+              type="submit"
+              variant="contained"
+              sx={{ mt: 3, mb: 2, px: 5 }}>
+              Register
+            </Button>
+          )}
         </Box>
         {error.status ? (
           <Alert severity={error.type as AlertColor}>{error.msg}</Alert>

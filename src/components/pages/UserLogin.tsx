@@ -9,6 +9,7 @@ import {
 import React, { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { useLoginUserMutation } from "../../services/userAuthApi";
+import { storeToken } from "../../services/LocalStorageService";
 
 const UserLogin = () => {
   const [error, setError] = useState({
@@ -39,7 +40,9 @@ const UserLogin = () => {
           msg: "Login Success",
           type: "success",
         });
-        navigate("/profile");
+        // Store Token
+          storeToken(res.data.token)
+          navigate("/profile");
       }
       if (res.data.status === "failed"){
         setError({

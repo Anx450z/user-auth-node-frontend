@@ -1,11 +1,13 @@
 import { Button, CssBaseline, Grid, Typography } from '@mui/material'
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
+import { removeToken } from '../../services/LocalStorageService'
 import ChangePassword from './ChangePassword'
 
 function Profile() {
   const navigate = useNavigate()
   const handleLogout = ()=>{
+    removeToken('token')
     navigate('/login')
   }
   return (
