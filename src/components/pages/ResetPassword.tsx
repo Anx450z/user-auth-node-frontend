@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Alert, AlertColor, Box, Button, Grid, TextField } from "@mui/material";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import { useResetPasswordMutation } from "../../services/userAuthApi";
 
 function ResetPassword() {
   const [error, setError] = useState({
@@ -8,29 +9,46 @@ function ResetPassword() {
     msg: "",
     type: "",
   });
-  const navigate = useNavigate()
 
-  const handleSubmit = (event: any) => {
+  const [resetPassword] = useResetPasswordMutation();
+  const { id, token } = useParams();
+
+  const navigate = useNavigate();
+
+  const handleSubmit = async (event: any) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     const actualData = {
       password: data.get("password"),
-      confirm_password: data.get("confirm_password"),
+      passwordConfirmation: data.get("confirm_password"),
     };
-    if (actualData.password && actualData.confirm_password) {
-      if (actualData.password === actualData.confirm_password) {
+
+    const res: any = await resetPassword({actualData, id, token});
+
+    if (actualData.password && actualData.passwordConfirmation) {
+      if (actualData.password === actualData.passwordConfirmation) {
         (
           document.getElementById("password-reset-form") as HTMLFormElement
         ).reset();
-        setError({
-          status: true,
-          msg: "Password reset successfully, Redirecting to login page...",
-          type: "success",
-        });
-        setTimeout(()=>{
-          navigate("/login")
-        }, 3000)
-      }else{
+
+        if (res.data.status === "success") {
+          setError({
+            status: true,
+            msg: res.data.msg,
+            type: "success",
+          });
+          setTimeout(() => {
+            navigate("/login");
+          }, 3000);
+        }
+        if (res.data.status === "failed") {
+          setError({
+            status: true,
+            msg: res.data.msg,
+            type: "error",
+          });
+        }
+      } else {
         setError({
           status: true,
           msg: "password and confirm password did not match",

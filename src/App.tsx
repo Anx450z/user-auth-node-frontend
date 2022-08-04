@@ -21,7 +21,7 @@ function App() {
               path="sendpasswordresetemail"
               element={<SendPasswordResetEmail />}
             />
-            <Route path="reset/:token" element={<ResetPassword />} />
+            <Route path="api/user/reset/:id/:token" element={<ResetPassword />} />
           </Route>
           <Route path="/profile" element={<Profile />} />
           <Route path ="*" element={<h1> Error 404 Page not found !!</h1>} />
