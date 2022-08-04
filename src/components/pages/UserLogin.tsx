@@ -1,18 +1,28 @@
-import { Alert, AlertColor, Box, Button, TextField } from "@mui/material";
+import {
+  Alert,
+  AlertColor,
+  Box,
+  Button,
+  CircularProgress,
+  TextField,
+} from "@mui/material";
 import React, { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
+import { useLoginUserMutation } from "../../services/userAuthApi";
 
 const UserLogin = () => {
   const [error, setError] = useState({
     status: false,
     msg: "",
-    type: ""
-  })
+    type: "",
+  });
 
-  const navigate = useNavigate()
-  
-  const handleSubmit = (event: any) => {
+  const navigate = useNavigate();
+  const [loginUser, { isLoading }] = useLoginUserMutation();
+
+  const handleSubmit = async (event: any) => {
     event.preventDefault();
+
     const data = new FormData(event.currentTarget);
     const actualData = {
       email: data.get("email"),
@@ -20,18 +30,30 @@ const UserLogin = () => {
     };
     if (actualData.email && actualData.password) {
       (document.getElementById("login-form") as HTMLFormElement).reset();
+
+      const res:any = await loginUser(actualData);
+      console.log(res);
+      if (res.data.status === "success"){
+        setError({
+          status: true,
+          msg: "Login Success",
+          type: "success",
+        });
+        navigate("/profile");
+      }
+      if (res.data.status === "failed"){
+        setError({
+          status: true,
+          msg: res.data.msg,
+          type: "error",
+        });
+      }
+    } else {
       setError({
-        status : true,
-        msg: "Login Success",
-        type: 'success'
-      })
-      navigate('/profile')
-    }else{
-      setError({
-        status : true,
+        status: true,
         msg: "All fields are required",
-        type: 'error'
-      })
+        type: "error",
+      });
     }
   };
   return (
@@ -60,16 +82,24 @@ const UserLogin = () => {
           label="Password"
           type="password"
         />
-        <Box textAlign={"center"}>
-          <Button
-            type="submit"
-            variant="contained"
-            sx={{ mt: 3, mb: 2, px: 5 }}>
-            Login
-          </Button>
+        <Box textAlign="center">
+          {isLoading ? (
+            <CircularProgress />
+          ) : (
+            <Button
+              type="submit"
+              variant="contained"
+              sx={{ mt: 3, mb: 2, px: 5 }}>
+              Login
+            </Button>
+          )}
         </Box>
         <NavLink to="/sendpasswordresetemail">Forgot Password ?</NavLink>
-        {error.status ? <Alert severity={error.type as AlertColor}>{error.msg}</Alert> : '' }
+        {error.status ? (
+          <Alert severity={error.type as AlertColor}>{error.msg}</Alert>
+        ) : (
+          ""
+        )}
       </Box>
     </>
   );

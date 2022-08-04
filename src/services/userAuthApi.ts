@@ -1,23 +1,35 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
+import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 // Define a service using a base URL and expected endpoints
 export const userAuthApi = createApi({
-  reducerPath: 'userAuthApi',
-  baseQuery: fetchBaseQuery({ baseUrl: 'http://localhost:8080/api/user/' }),
+  reducerPath: "userAuthApi",
+  baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:8080/api/user/" }),
   endpoints: (builder) => ({
     registerUser: builder.mutation({
-      query:(user)=>{
-        return{
-          url:'register',
-          method:'POST',
+      query: (user) => {
+        return {
+          url: "register",
+          method: "POST",
           body: user,
-          header:{
-            'Content':'application/json',
-          }
-        }
-      }
+          header: {
+            Content: "application/json",
+          },
+        };
+      },
     }),
+    loginUser : builder.mutation({
+      query: (user) => {
+        return {
+          url: "login",
+          method: "POST",
+          body: user,
+          header: {
+            Content: "application/json",
+          },
+        };
+      },
+    })
   }),
-})
+});
 
-export const { useRegisterUserMutation } = userAuthApi
+export const { useRegisterUserMutation, useLoginUserMutation } = userAuthApi;

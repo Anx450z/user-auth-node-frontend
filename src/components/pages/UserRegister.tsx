@@ -15,16 +15,15 @@ function UserRegister() {
 
   const handleSubmit = async (event: any) => { 
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
+    const form_data = new FormData(event.currentTarget);
     const actualData = {
-      email: data.get("email"),
-      password: data.get("password"),
-      userName: data.get("user_name"),
-      firstName: data.get("first_name"),
-      lastName: data.get("last_name"),
-      passwordConfirmation: data.get("confirm_password"),
+      email: form_data.get("email"),
+      password: form_data.get("password"),
+      userName: form_data.get("user_name"),
+      firstName: form_data.get("first_name"),
+      lastName: form_data.get("last_name"),
+      passwordConfirmation: form_data.get("confirm_password"),
     };
-    console.log(actualData)
     if (
       actualData.email &&
       actualData.password &&
@@ -32,16 +31,25 @@ function UserRegister() {
       actualData.passwordConfirmation !== null
     ) {
       if (actualData.password === actualData.passwordConfirmation) {
-        // (document.getElementById("register-form") as HTMLFormElement).reset();
-        const res = await registerUser(actualData)
-        console.log(res)
-        setError({
-          status: true,
-          msg: "Login Success",
-          type: "success",
-        });
-
-        navigate("/profile");
+        (document.getElementById("register-form") as HTMLFormElement).reset();
+    
+        const res:any = await registerUser(actualData)
+        if (res.data.status === "success"){
+          setError({
+            status: true,
+            msg: "Registration Success",
+            type: "success",
+          });
+          // Store Token
+          navigate("/login");
+        }
+        if (res.data.status === "failed"){
+          setError({
+            status: true,
+            msg: res.data.msg,
+            type: "error",
+          });
+        }
       } else {
         setError({
           status: true,
