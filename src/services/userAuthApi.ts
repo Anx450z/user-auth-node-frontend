@@ -28,8 +28,20 @@ export const userAuthApi = createApi({
           },
         };
       },
+    }),
+    sendPasswordResetEmail : builder.mutation({
+      query: (user) => {
+        return {
+          url: "send-reset-password-email",
+          method: "POST",
+          body: user,
+          header: {
+            Content: "application/json",
+          },
+        };
+      },
     })
   }),
 });
 
-export const { useRegisterUserMutation, useLoginUserMutation } = userAuthApi;
+export const { useRegisterUserMutation, useLoginUserMutation, useSendPasswordResetEmailMutation } = userAuthApi;
