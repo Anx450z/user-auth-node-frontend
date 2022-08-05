@@ -4,6 +4,8 @@ import { useNavigate } from "react-router-dom";
 import { getToken, removeToken } from "../../services/LocalStorageService";
 import ChangePassword from "./ChangePassword";
 import { useGetLoggedUserQuery } from "../../services/userAuthApi";
+import { useDispatch } from "react-redux";
+import { setUserInfo, unSetUserInfo } from "../../features/userSlice";
 
 function Profile() {
   const navigate = useNavigate();
@@ -22,15 +24,31 @@ function Profile() {
       setUserData({
         email: data.user.email,
         firstName: data.user.first_name,
-        userName: data.user.user_name
+        userName: data.user.user_name,
       });
     }
-
   }, [isSuccess, data]);
   const handleLogout = () => {
+    // unset Redux State
+    dispatch(unSetUserInfo({ email: "", name: "" }));
+
     removeToken("token");
     navigate("/login");
   };
+
+  // Store User Data in Redux Store
+  const dispatch = useDispatch();
+  useEffect(() => {
+    if (data && isSuccess) {
+      dispatch(
+        setUserInfo({
+          email: data.user.email,
+          name: data.user.user_name,
+        })
+      );
+    }
+  }, [isSuccess, data, dispatch]);
+
   return (
     <>
       <CssBaseline />

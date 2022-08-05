@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { Alert, AlertColor, Box, Button, Grid, TextField } from "@mui/material";
 import { useChangeUserPasswordMutation } from "../../services/userAuthApi";
 import { getToken } from "../../services/LocalStorageService";
+import { useSelector } from "react-redux";
+
 
 function ChangePassword() {
   const [error, setError] = useState({
@@ -57,6 +59,10 @@ function ChangePassword() {
       });
     }
   };
+// getting Data from Redux Store
+  const myData =useSelector(state => (state as any).user)
+  console.log(myData)
+  
   return (
     <>
       <Grid container justifyContent="center">
