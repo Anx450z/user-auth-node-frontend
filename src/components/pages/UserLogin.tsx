@@ -42,7 +42,9 @@ const UserLogin = () => {
         });
         // Store Token
           storeToken(res.data.token)
-          navigate("/profile");
+          setTimeout(() => {
+            navigate("/profile");
+          }, 500);
       }
       if (res.data.status === "failed"){
         setError({
