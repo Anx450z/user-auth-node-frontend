@@ -6,10 +6,12 @@ import {
   CircularProgress,
   TextField,
 } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { useLoginUserMutation } from "../../services/userAuthApi";
-import { storeToken } from "../../services/LocalStorageService";
+import { getToken, storeToken } from "../../services/LocalStorageService";
+import { useDispatch } from "react-redux";
+import { setUserToken } from "../../features/authSlice";
 
 const UserLogin = () => {
   const [error, setError] = useState({
@@ -59,6 +61,13 @@ const UserLogin = () => {
       });
     }
   };
+//  saving token using Redux
+  let token = getToken()
+  const dispatch = useDispatch()
+  useEffect(()=>{
+    dispatch(setUserToken({token: token}))
+  },[token, dispatch])
+  
   return (
     <>
       <Box

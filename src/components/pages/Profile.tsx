@@ -6,6 +6,7 @@ import ChangePassword from "./ChangePassword";
 import { useGetLoggedUserQuery } from "../../services/userAuthApi";
 import { useDispatch } from "react-redux";
 import { setUserInfo, unSetUserInfo } from "../../features/userSlice";
+import { unSetUserToken } from "../../features/authSlice";
 
 function Profile() {
   const navigate = useNavigate();
@@ -31,6 +32,7 @@ function Profile() {
   const handleLogout = () => {
     // unset Redux State
     dispatch(unSetUserInfo({ email: "", name: "" }));
+    dispatch(unSetUserToken({ token: null}));
 
     removeToken("token");
     navigate("/login");
