@@ -33,7 +33,6 @@ function SendPasswordResetEmail() {
 
       const res: any = await sendPasswordResetEmail(actualData);
 
-      console.log(res);
       if (res.data.status === "success") {
         setError({
           status: true,

@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { Alert, AlertColor, Box, Button, Grid, TextField } from "@mui/material";
+import { useChangeUserPasswordMutation } from "../../services/userAuthApi";
+import { getToken } from "../../services/LocalStorageService";
 
 function ChangePassword() {
   const [error, setError] = useState({
@@ -7,24 +9,40 @@ function ChangePassword() {
     msg: "",
     type: "",
   });
-  const handleSubmit = (event: any) => {
+
+  const [changeUserPassword] = useChangeUserPasswordMutation();
+
+  const handleSubmit = async (event: any) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     const actualData = {
       password: data.get("password"),
-      confirm_password: data.get("confirm_password"),
+      passwordConfirmation: data.get("confirm_password"),
     };
-    if (actualData.password && actualData.confirm_password) {
-      if (actualData.password === actualData.confirm_password) {
-        (
-          document.getElementById("password-reset-form") as HTMLFormElement
-        ).reset();
-        setError({
-          status: true,
-          msg: "Password reset successfully",
-          type: "success",
-        });
-      }else{
+
+    const token = getToken();
+
+    if (actualData.password && actualData.passwordConfirmation) {
+      if (actualData.password === actualData.passwordConfirmation) {
+        const res: any = await changeUserPassword({ actualData, token });
+        if (res.data.status === "success") {
+          (
+            document.getElementById("password-reset-form") as HTMLFormElement
+          ).reset();
+          setError({
+            status: true,
+            msg: res.data.msg,
+            type: "success",
+          });
+        }
+        if (res.data.status === "failed") {
+          setError({
+            status: true,
+            msg: res.data.msg,
+            type: "error",
+          });
+        }
+      } else {
         setError({
           status: true,
           msg: "password and confirm password did not match",
@@ -86,7 +104,6 @@ function ChangePassword() {
       </Grid>
     </>
   );
-  
 }
 
-export default ChangePassword
+export default ChangePassword;

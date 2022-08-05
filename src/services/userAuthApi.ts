@@ -64,6 +64,18 @@ export const userAuthApi = createApi({
         };
       },
     }),
+    changeUserPassword: builder.mutation({
+      query: ({actualData, token}) => {
+        return {
+          url: "change-password",
+          method: "POST",
+          body: actualData,
+          headers: {
+            authorization: `Bearer ${token}`,
+          },
+        };
+      },
+    }),
   }),
 });
 
@@ -72,5 +84,6 @@ export const {
   useLoginUserMutation,
   useSendPasswordResetEmailMutation,
   useResetPasswordMutation,
-  useGetLoggedUserQuery
+  useGetLoggedUserQuery,
+  useChangeUserPasswordMutation
 } = userAuthApi;

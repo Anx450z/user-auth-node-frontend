@@ -30,11 +30,9 @@ const UserLogin = () => {
       password: data.get("password"),
     };
     if (actualData.email && actualData.password) {
-      (document.getElementById("login-form") as HTMLFormElement).reset();
-
       const res:any = await loginUser(actualData);
-      console.log(res);
       if (res.data.status === "success"){
+        (document.getElementById("login-form") as HTMLFormElement).reset();
         setError({
           status: true,
           msg: "Login Success",
